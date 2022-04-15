@@ -5,8 +5,8 @@ import { State } from './state'
 const columns = [
     {
       title: 'id',
-      dataIndex: 'id',
-      key: 'id',
+      dataIndex: 'key',
+      key: 'key',
       render: text => <a>{text}</a>,
     },
     {

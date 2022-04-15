@@ -5,7 +5,7 @@ import { GET_LIST, SELECT } from "../actions";
 import { AnyAction } from 'redux';
 
 
-const getList = (state: Array<ReqEntry> = initialState.List, action: AnyAction): Array<ReqEntry> => {
+export const getList = (state: Array<ReqEntry> = initialState.List, action: AnyAction): Array<ReqEntry> => {
 
     switch(action.type)
     {
@@ -19,7 +19,7 @@ const getList = (state: Array<ReqEntry> = initialState.List, action: AnyAction):
 
 //better types for reducers
 
-const select = (state: ReqData = initialState.SelectedReq, action: AnyAction): ReqData => {
+export const select = (state: ReqData = initialState.SelectedReq, action: AnyAction): ReqData => {
 
     switch(action.type)
     {

@@ -1,9 +1,11 @@
-import { createStore, applyMiddleware } from 'redux'
+import { createStore, applyMiddleware, combineReducers } from 'redux'
 import createSagaMiddleware from 'redux-saga'
 
 import { call, put, takeEvery, takeLatest } from 'redux-saga/effects'
 import { ReqEntry } from './state';
 import initialState from './state'
+
+import { getList, select } from './reducers/globalReducers';
 
 var server: string = "http://localhost:3000/";
 
@@ -31,11 +33,17 @@ function* mySaga() {
 }
 
 
+const reducer = combineReducers({
+    List: getList,
+    SelectedReq: select,
+    components: (state = initialState.components, action) => state
+ })
+
 
 const sagaMiddleware = createSagaMiddleware()
 // mount it on the Store
 export const store = createStore(
-  (state, action) => state,
+  reducer,
   initialState,
   applyMiddleware(sagaMiddleware)
 )
