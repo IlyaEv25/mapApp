@@ -1,4 +1,12 @@
 .Map {
-  height: 360px;
-  width: 500px;
+  height: 1060px;
+  width: 1000px;
+}
+
+.table {
+  margin-right: 100px;
+}
+
+.rb {
+  margin-right: 100px;
 }

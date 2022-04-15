@@ -27,7 +27,7 @@ const Map = ({start, finish}) => {
       var finish_point = await get_coord(finish);
   
       
-      var data = await read_route("overview=full&geometries=geojson", start_point, finish_point)
+      var data = await read_route("overview=full&geometries=geojson", start_point, finish_point);
   
       var latlngs = data.routes[0].geometry.coordinates;
       latlngs = latlngs.map(coord => [coord[1], coord[0]]);
