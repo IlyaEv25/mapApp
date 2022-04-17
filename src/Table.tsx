@@ -66,7 +66,7 @@ const columns = [
 const TableContainer = ({data, selected, dispatch}) => {
     console.log("TABLEDATA",data);
     return  (
-        <Table rowSelection = {{selectedRowKeys: [selected]}} columns={columns} dataSource={data} onRow={(record) => ({
+        <Table className='table' rowSelection = {{selectedRowKeys: [selected]}} columns={columns} dataSource={data} onRow={(record) => ({
           onClick: () => {
             dispatch({type: SELECT_SAGA, key: record.key, from: record.from, to: record.to, route: record.data})
             console.log(record);

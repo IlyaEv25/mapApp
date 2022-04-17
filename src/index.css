@@ -1,4 +1,4 @@
-.wrapper {
+.mapwrapper {
   position: relative;
 }
 
@@ -25,9 +25,31 @@
 }
 
 .table {
-  margin-right: 100px;
+  margin-left: 5%;
+  width: 95%;
+  cursor: pointer;
+}
+
+.tablewrapper {
+  display: flex;
+  width: 100%;
+  height: 1060px;
+  /* cursor: e-resize;
+  resize: horizontal;
+  overflow: auto; */
 }
 
 .rb {
   margin-right: 100px;
+  height:1060px;
+}
+
+.sider {
+  height: 1060px;
+  /* display:flex; */
+}
+
+.additional {
+  width: 5%;
+  cursor: e-resize;
 }

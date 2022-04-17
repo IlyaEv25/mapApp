@@ -48,7 +48,7 @@ const initialState: State = {
         route: null
     },
     components: {
-        border: 400,
+        border: 700,
         filteredList: [],
         selected: -1,
         edited: -1,

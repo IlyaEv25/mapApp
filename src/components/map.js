@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { connect } from 'react-redux';
 import L from '../../node_modules/leaflet/dist/leaflet' 
-import { SET_MAP, SET_POLYLINE } from '../actions'
+import { SET_MAP } from '../actions'
 
 const Map = ({data, mapData, dispatch}) => {
     useEffect(() => {
@@ -21,15 +21,6 @@ const Map = ({data, mapData, dispatch}) => {
         else
             var map = mapData.mapPointer;
 
-        // if (!map.HasLayer)
-        //     L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4NXVycTA2emYycXBndHRqcmZ3N3gifQ.rJcFIG214AriISLbB6B5aw', {
-        //         attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
-        //         maxZoom: 18,
-        //         id: 'mapbox/streets-v11',
-        //         tileSize: 512,
-        //         zoomOffset: -1
-        //     }).addTo(map);
-
         console.log("PRED", data);
         if (data.from)
         {
@@ -38,13 +29,16 @@ const Map = ({data, mapData, dispatch}) => {
                 map.removeLayer(layer);
             })
 
-            var polyline = L.polyline(data.route.map(x => [x.y, x.x]), {color: 'blue'}).addTo(map);
-            var polylineLayer = L.layerGroup([polyline]);
-            
-            polylineLayer.id = -1;
-            polylineLayer.addTo(map);
+            if (data.route)
+            {
+              var polyline = L.polyline(data.route.map(x => [x.y, x.x]), {color: 'blue'}).addTo(map);
+              var polylineLayer = L.layerGroup([polyline]);
+              
+              polylineLayer.id = -1;
+              polylineLayer.addTo(map);
 
-            map.fitBounds(polyline.getBounds());
+              map.fitBounds(polyline.getBounds());
+            }
         }
 
         

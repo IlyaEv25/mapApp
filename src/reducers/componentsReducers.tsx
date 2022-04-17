@@ -1,16 +1,7 @@
 import {SELECT} from '../actions'
 import { combineReducers } from 'redux';
 import initialState from '../state'
-// const resize = (state, action) =>
-// {
-//     switch (action.type)
-//     {
-//         case RESIZE:
-//             return action.size;
-//         default:
-//             return state;
-//     }
-// }
+
 
 const selectTable = (state = initialState.components.selected, action) => {
     switch (action.type)

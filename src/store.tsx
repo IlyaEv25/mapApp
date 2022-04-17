@@ -24,8 +24,15 @@ var server: string = "http://localhost:3000/";
 // })
 
 async function read_route(options, coord0, coord1){
-   var resp = await fetch(`http://router.project-osrm.org/route/v1/driving/${coord0[0]},${coord0[1]};${coord1[0]},${coord1[1]}?` + options);
-   var str = await resp.text();
+   try
+   {
+    var resp = await fetch(`http://router.project-osrm.org/route/v1/driving/${coord0[0]},${coord0[1]};${coord1[0]},${coord1[1]}?` + options);
+    var str = await resp.text();
+   }
+   catch(e) {
+       var str = "{}";
+       console.log(e);
+   }
    return JSON.parse(str)
  }
  
@@ -117,12 +124,12 @@ function* fetchGet(action)
    var to = yield call(get_coord, action.data.to);
 
    var route = yield call(read_route, "overview=full&geometries=geojson", from, to);
-   console.log(from, to, route.routes[0].geometry.coordinates);
+   //console.log(from, to, route.routes[0].geometry.coordinates);
 
    var reqData = {
       from: toGeoPoint(from, action.data.from),
       to: toGeoPoint(to, action.data.to),
-      route: route.routes[0].geometry.coordinates.map(coord => toGeoPoint(coord))
+      route: route.routes? route.routes[0].geometry.coordinates.map(coord => toGeoPoint(coord)) : null
     }
 
 
