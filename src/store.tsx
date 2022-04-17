@@ -38,7 +38,7 @@ async function read_route(options, coord0, coord1){
  
 async function get_coord(name)
 {
-   return fetch(`https://nominatim.openstreetmap.org/search?q=${name}&format=json`).then(res => res.json()).then(f => [f[0].lon,  f[0].lat])
+   return fetch(`https://nominatim.openstreetmap.org/search?q=${name}&format=json`).then(res => res.json()).then(f => f[0]?[f[0].lon,  f[0].lat]:[])
 }
 
 async function get_list(name)
@@ -139,6 +139,28 @@ function* fetchGet(action)
 
 }
 
+function* fetchEdit(action)
+{
+   console.log("EDIT", action);
+   var from = yield call(get_coord, action.from);
+   var to = yield call(get_coord, action.to);
+
+   var route = yield call(read_route, "overview=full&geometries=geojson", from, to);
+   //console.log(from, to, route.routes[0].geometry.coordinates);
+
+   var reqData = {
+      from: toGeoPoint(from, action.from),
+      to: toGeoPoint(to, action.to),
+      route: route.routes? route.routes[0].geometry.coordinates.map(coord => toGeoPoint(coord)) : null
+    }
+
+
+   yield put({type: "GET", data: reqData});
+   yield put({type: "EDIT_LIST", data: reqData, key: action.key})
+
+
+}
+
 function* fetchSearchList(action)
 {
     console.log(action);
@@ -157,6 +179,10 @@ function* getSaga() {
    yield takeEvery("GET_DATA", fetchGet);
 }
 
+function* editSaga() {
+   yield takeLatest("EDIT_SAGA", fetchEdit);
+}
+
 // Starts fetchUser on each dispatched USER_FETCH_REQUESTED action
 // Allows concurrent fetches of user
 function* initSaga() {
@@ -172,7 +198,8 @@ function* rootSaga() {
      initSaga(),
      getSaga(),
      selectSaga(),
-     searchListSaga()
+     searchListSaga(),
+     editSaga()
    ])
  }
  

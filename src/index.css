@@ -1,9 +1,12 @@
 h1 {
   color: white;
 }
+
+.footer,
 .content {
   background-color: rgb(0, 21, 41) ;
 }
+
 .mapwrapper {
   position: relative;
   margin-right: 3vw;

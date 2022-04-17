@@ -13,11 +13,12 @@ export const getList = (state: Array<ReqEntry> = initialState.List, action: AnyA
             return action.list;
         case "ADD_TO_TABLE":
             console.log(action);
+            var prev_id = state.length > 0 ? state[state.length - 1].id : -1;
             return [
                 ...state,
                 {
-                    id: state.length,
-                    key: state.length,
+                    id: prev_id+ 1,
+                    key: prev_id + 1,
                     from: action.data.from.name,
                     to: action.data.to.name,
                     data: {
@@ -27,6 +28,25 @@ export const getList = (state: Array<ReqEntry> = initialState.List, action: AnyA
                     }
                 }
                 ]
+        case "EDIT_LIST":
+            return state.map(entry => {
+                if (entry.key == action.key)
+                    return {
+                        id: entry.key,
+                        key: entry.key,
+                        from: action.data.from.name,
+                        to: action.data.to.name,
+                        data: {
+                            from: action.data.from,
+                            to: action.data.to,
+                            route: action.data.route
+                        }
+                    }
+                else
+                    return entry;
+            })
+        case "DELETE_ELEMENT":
+            return state.filter(entry => entry.id != action.id);
         default:
             return state;
     }

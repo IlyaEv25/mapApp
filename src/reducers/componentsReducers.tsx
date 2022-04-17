@@ -63,6 +63,28 @@ const setStartBorder = (state = initialState.components.startBorder, action) => 
     }
 }
 
+const setEdited = (state = initialState.components.edited, action) => {
+    switch (action.type)
+    {
+        case "SET_EDITED":
+            console.log(action);
+            return action.edited;
+        default:
+            return state;
+    }
+}
+
+const setEditedType = (state = initialState.components.editedType, action) => {
+    switch (action.type)
+    {
+        case "SET_EDITED":
+            console.log(action);
+            return action.edit_type;
+        default:
+            return state;
+    }
+}
+
 
 const componentsReducer = combineReducers({
     border: setBorder,
@@ -71,7 +93,8 @@ const componentsReducer = combineReducers({
     mouseDown: mousePressed,
     selected: selectTable,
     filteredList: (state = initialState.components.filteredList, action) => state,
-    edited: (state = initialState.components.edited, action) => state,
+    edited: setEdited,
+    editedType: setEditedType,
     fromSelectedList: fromList,
     toSelectedList: (state = initialState.components.toSelectedList, action) => state
  })

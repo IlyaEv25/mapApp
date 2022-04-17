@@ -26,6 +26,7 @@ export type ComponentsData = {
     filteredList: Array<ReqEntry>,
     selected: number,
     edited: number,
+    editedType: string,
     fromSelectedList: Array<GeoPoint>,
     toSelectedList: Array<GeoPoint>
 }
@@ -58,6 +59,7 @@ const initialState: State = {
         filteredList: [],
         selected: -1,
         edited: -1,
+        editedType: "from",
         fromSelectedList: [],
         toSelectedList: []
     }

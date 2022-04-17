@@ -11,7 +11,7 @@ import TableContainer from "./Table"
 import { useState } from 'react';
 
 
-const App = ({border, xStart, mouseDown, startBorder, dispatch}) => {
+const App = ({border, xStart, mouseDown, startBorder, map, dispatch}) => {
     var [counter, setCounter] = useState(0);
     return (
         <Layout
@@ -20,6 +20,7 @@ const App = ({border, xStart, mouseDown, startBorder, dispatch}) => {
                         dispatch({type: "MOUSE_DOWN", mouse_down: false});
                         dispatch({type: "SET_START_BORDER", start_border: border})
                         dispatch({type: "X_START", x: -1});
+                        map.invalidateSize();
                     }
             }} 
             onMouseMove = {(e) => {
@@ -53,12 +54,13 @@ const App = ({border, xStart, mouseDown, startBorder, dispatch}) => {
                     {/* <button onClick={() => dispatch({type: "INIT"})}>Blabla</button> */}
                 </Content>
             </Layout>
-
+            <Footer className ="footer"></Footer>
         </Layout>
         )
         }
 
 export default connect((state:State) => ({
+    map: state.mapData.mapPointer,
     border: state.components.border,
     startBorder: state.components.startBorder,
     xStart: state.components.xStart,

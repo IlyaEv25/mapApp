@@ -21,6 +21,9 @@ const Map = ({data, mapData, dispatch}) => {
         else
             var map = mapData.mapPointer;
 
+        map.invalidateSize();
+        //setTimeout(function(){ map.invalidateSize()}, 400);
+
         console.log("PRED", data);
         if (data.from)
         {
