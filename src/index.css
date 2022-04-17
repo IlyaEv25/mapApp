@@ -1,10 +1,19 @@
+h1 {
+  color: white;
+}
+.content {
+  background-color: rgb(0, 21, 41) ;
+}
 .mapwrapper {
   position: relative;
+  margin-right: 3vw;
+  height: 70vh;
+  
 }
 
 .Map {
-  height: 1060px;
-  width: 1000px;
+  height: 100%;
+  width: 100%;
   position: relative;
   top: 0;
   left: 0;
@@ -42,9 +51,9 @@
 }
 
 .table {
-  margin-left: 5%;
+  margin-left: 3vw;
   width: 95%;
-  height: 900px;
+  height: 100%;
   cursor: pointer;
   overflow: scroll;
 }
@@ -52,10 +61,10 @@
 .tablewrapper {
   display: flex;
   width: 100%;
-  height: 1060px;
+  height: 100%;
   /* cursor: e-resize;
-  resize: horizontal;
-  overflow: auto; */
+  resize: horizontal; */
+  /* overflow: scroll; */
 }
 
 .rb {
@@ -64,10 +73,15 @@
 }
 
 .sider {
-  margin-right: 10%;
-  min-height: 1060px;
+  
+  height: 70vh;
+  /* overflow: scroll; */
   /* display:flex; */
 }
+
+.TableContainer {
+  overflow: scroll;
+} 
 
 .additional {
   width: 5%;

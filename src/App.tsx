@@ -30,7 +30,7 @@ const App = ({border, xStart, mouseDown, startBorder, dispatch}) => {
                     dispatch({type: "SET_BORDER", border: startBorder + (e.pageX - xStart)})
                 }
         }}>
-            <Header>
+            <Header >
                 <h1>Navigation app</h1>
             </Header>
             <Layout>
@@ -42,15 +42,15 @@ const App = ({border, xStart, mouseDown, startBorder, dispatch}) => {
                                 console.log(e)
                                 dispatch({type: "MOUSE_DOWN", mouse_down: true});
                                 dispatch({type: "X_START", x: e.pageX});
-                            }}>g</div>
+                            }}></div>
                     </div>
                 </Sider>
-                <Content>
-                    <div className="mapwrapper">                       
+                <Content className={"content"}>
+                    <div className="mapwrapper" style ={{width: "100% -" + border + "px" }}>                       
                         <Map/>
                         <Form/>
                     </div>
-                    <button onClick={() => dispatch({type: "INIT"})}>Blabla</button>
+                    {/* <button onClick={() => dispatch({type: "INIT"})}>Blabla</button> */}
                 </Content>
             </Layout>
 
