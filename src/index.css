@@ -24,10 +24,27 @@
 
 }
 
+::-webkit-scrollbar {
+  width: 12px;               /* width of the entire scrollbar */
+  height: 12px;
+}
+
+::-webkit-scrollbar-track {
+  background: rgba(0, 0, 0, 0);        /* color of the tracking area */
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: rgb(12, 12, 143);    /* color of the scroll thumb */
+  border-radius: 20px;       /* roundness of the scroll thumb */
+  border: 3px solid black;  /* creates padding around scroll thumb */
+}
+
 .table {
   margin-left: 5%;
   width: 95%;
+  height: 900px;
   cursor: pointer;
+  overflow: scroll;
 }
 
 .tablewrapper {
@@ -45,7 +62,7 @@
 }
 
 .sider {
-  height: 1060px;
+  min-height: 1060px;
   /* display:flex; */
 }
 

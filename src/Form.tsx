@@ -18,7 +18,7 @@ const FormW = ({dispatch, options}) =>(
             name="from"
             rules={[{ required: true, message: 'Please input your username!' }]}>
             {/* <Input /> */}
-            <AutoComplete style={{ width: 200 }} onChange={(e) => (dispatch({type: "SEARCH_LIST_SAGA", str: e}))} placeholder="input here">
+            <AutoComplete style={{ width: 200 }} onChange={(e) => (dispatch({type: "SEARCH_LIST_SAGA", str: e}))} placeholder="From" >
                 {options.map((option, index) => (
                     <Option key={index} value={option.name}>
                     {option.name}
@@ -30,7 +30,7 @@ const FormW = ({dispatch, options}) =>(
         <Form.Item
             name="to"
             rules={[{ required: true, message: 'Please input your password!' }]}>
-            <AutoComplete style={{ width: 200 }} onChange={(e) => (dispatch({type: "SEARCH_LIST_SAGA", str: e}))} placeholder="input here">
+            <AutoComplete style={{ width: 200 }} onChange={(e) => (dispatch({type: "SEARCH_LIST_SAGA", str: e}))} placeholder="To">
                 {options.map((option, index) => (
                     <Option key={index} value={option.name}>
                     {option.name}
@@ -41,7 +41,7 @@ const FormW = ({dispatch, options}) =>(
 
         <Form.Item wrapperCol={{ offset: 12, span: 16 }}>
             <Button type="primary" htmlType="submit">
-            +
+            Get Route
             </Button>
         </Form.Item>
     </Form>
