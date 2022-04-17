@@ -1,5 +1,6 @@
 export type ReqEntry = {
     id: number,
+    key:number,
     from: string,
     to: string,
     data: ReqData | null
@@ -27,15 +28,19 @@ export type ComponentsData = {
 }
 
 
+
 export type State = {
-    mapPointer: any,
+    mapData: any,
     List: Array<ReqEntry>,
     SelectedReq: ReqData,
     components: ComponentsData
 }
 
 const initialState: State = {
-    mapPointer: null,
+    mapData: {
+        mapPointer: null,
+        polyline: null
+    },
     List : [],
     SelectedReq: {
         from: null,

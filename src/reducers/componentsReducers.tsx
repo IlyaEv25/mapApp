@@ -22,13 +22,23 @@ const selectTable = (state = initialState.components.selected, action) => {
     }
 }
 
+const fromList = (state = initialState.components.fromSelectedList, action) => {
+    switch (action.type)
+    {
+        case "GET_SEARCH_LIST":
+            return action.list;
+        default:
+            return state;
+    }
+}
+
 
 const componentsReducer = combineReducers({
     border: (state = initialState.components.border, action) => state,
     selected: selectTable,
     filteredList: (state = initialState.components.filteredList, action) => state,
     edited: (state = initialState.components.edited, action) => state,
-    fromSelectedList: (state = initialState.components.fromSelectedList, action) => state,
+    fromSelectedList: fromList,
     toSelectedList: (state = initialState.components.toSelectedList, action) => state
  })
 

@@ -1,6 +1,10 @@
 import { Layout } from 'antd';
 import { Table, Tag, Space } from 'antd';
-import { Form, Input, Button, Checkbox } from 'antd';
+import { Form, Input, Button, Checkbox, AutoComplete  } from 'antd';
+
+const { Option } = AutoComplete;
+import { State } from './state'
+
 
 import { connect } from 'react-redux';
 
@@ -13,7 +17,7 @@ import { setMap } from './reducers/globalReducers';
 import TableContainer from "./Table"
 
 
-const App = ({dispatch}) => {
+const App = ({dispatch, options}) => {
     return (
         <Layout>
             <Header>
@@ -33,21 +37,34 @@ const App = ({dispatch}) => {
                             name="basic"
                             wrapperCol={{ span: 16 }}
                             //initialValues={{ remember: true }}
-                            onFinish={() => console.log("!")}
+                            onFinish={(e) => dispatch({type: "GET_DATA", data: e})}
                             //onFinishFailed={onFinishFailed}
                             autoComplete="on"
                             >
                             <Form.Item
                                 wrapperCol={{span: 10}}
-                                name="username"
+                                name="from"
                                 rules={[{ required: true, message: 'Please input your username!' }]}>
-                                <Input />
+                                {/* <Input /> */}
+                                <AutoComplete style={{ width: 200 }} onChange={(e) => (dispatch({type: "SEARCH_LIST_SAGA", str: e}))} placeholder="input here">
+                                    {options.map((option, index) => (
+                                        <Option key={index} value={option.name}>
+                                        {option.name}
+                                        </Option>
+                                    ))}
+                                </AutoComplete>
                             </Form.Item>
 
                             <Form.Item
-                                name="password"
+                                name="to"
                                 rules={[{ required: true, message: 'Please input your password!' }]}>
-                                <Input />
+                                <AutoComplete style={{ width: 200 }} onChange={(e) => (dispatch({type: "SEARCH_LIST_SAGA", str: e}))} placeholder="input here">
+                                    {options.map((option, index) => (
+                                        <Option key={index} value={option.name}>
+                                        {option.name}
+                                        </Option>
+                                    ))}
+                                </AutoComplete>
                             </Form.Item>
 
                             <Form.Item wrapperCol={{ offset: 12, span: 16 }}>
@@ -66,4 +83,4 @@ const App = ({dispatch}) => {
         )
         }
 
-export default connect()(App);
+export default connect((state: State) => ({options : state.components.fromSelectedList}))(App);

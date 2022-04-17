@@ -1,12 +1,14 @@
-import { createStore, applyMiddleware, combineReducers } from 'redux'
+import { createStore, applyMiddleware, combineReducers, compose } from 'redux'
 import createSagaMiddleware from 'redux-saga'
 
 import { call, put, all, takeEvery, takeLatest } from 'redux-saga/effects'
 import { ReqEntry } from './state';
 import initialState from './state'
 
-import { getList, select, setMap } from './reducers/globalReducers';
+import { getList, setMap, get } from './reducers/globalReducers';
 import componentsReducer from './reducers/componentsReducers';
+import selectElement from './reducers/selectElement';
+
 import { SELECT } from './actions';
 
 var server: string = "http://localhost:3000/";
@@ -30,6 +32,11 @@ async function read_route(options, coord0, coord1){
 async function get_coord(name)
 {
    return fetch(`https://nominatim.openstreetmap.org/search?q=${name}&format=json`).then(res => res.json()).then(f => [f[0].lon,  f[0].lat])
+}
+
+async function get_list(name)
+{
+   return fetch(`https://nominatim.openstreetmap.org/search?q=${name}&format=json`).then(res => res.json())
 }
 
 export const getContacts = async (): Promise<Array<ReqEntry>> => {
@@ -68,51 +75,79 @@ const toGeoPoint = (coord, name = "") => ({name : name, x: coord[0], y: coord[1]
 
 function* fetchSelect(action)
 {
-   console.log(action);
-   var from = yield call(get_coord, action.from);
-   var to = yield call(get_coord, action.to);
+   console.log(action, !action.route);
+   var reqData;
+   if (!action.route)
+   {
+    var from = yield call(get_coord, action.from);
+    var to = yield call(get_coord, action.to);
+
+    var route_res = yield call(read_route, "overview=full&geometries=geojson", from, to);
+    var route = route_res.routes[0].geometry.coordinates.map(coord => toGeoPoint(coord));
+    //console.log(from, to, route.routes[0].geometry.coordinates);
+    reqData = {
+        from: toGeoPoint(from, action.from),
+        to: toGeoPoint(to, action.to),
+        route: route
+      }
+   }
+   else
+   {
+    var route = action.route.route;
+    reqData = {
+        from: action.route.from,
+        to: action.route.to,
+        route: route
+      }
+   }
+
+
+
+   yield put({type: "GET", data: reqData});
+   yield put({type: SELECT, key: action.key});
+
+
+}
+
+
+function* fetchGet(action)
+{
+   console.log("!");
+   var from = yield call(get_coord, action.data.from);
+   var to = yield call(get_coord, action.data.to);
 
    var route = yield call(read_route, "overview=full&geometries=geojson", from, to);
    console.log(from, to, route.routes[0].geometry.coordinates);
 
    var reqData = {
-      from: toGeoPoint(from, action.from),
-      to: toGeoPoint(to, action.to),
+      from: toGeoPoint(from, action.data.from),
+      to: toGeoPoint(to, action.data.to),
       route: route.routes[0].geometry.coordinates.map(coord => toGeoPoint(coord))
     }
 
 
-   yield put({type: SELECT, data: reqData, key: action.key});
+   yield put({type: "GET", data: reqData});
+   yield put({type: "ADD_TO_TABLE", data: reqData})
 
 
 }
 
-function* fetchCheck()
+function* fetchSearchList(action)
 {
-   console.log("!");
-   // var from = yield call(get_coord, action.from);
-   // var to = yield call(get_coord, action.to);
-
-   // var route = yield call(read_route, "overview=full&geometries=geojson", from, to);
-   // console.log(from, to, route.routes[0].geometry.coordinates);
-
-   // var reqData = {
-   //    from: toGeoPoint(from, action.from),
-   //    to: toGeoPoint(to, action.to),
-   //    route: route.routes[0].geometry.coordinates.map(coord => toGeoPoint(coord))
-   //  }
-
-
-
-   //yield put({type: "CHECK"})
-
-
+    console.log(action);
+    var name_list = yield call(get_list, action.str);
+    console.log(name_list.map(entry => toGeoPoint([entry.lat, entry.lon], entry.display_name)));
+    yield put({type: "GET_SEARCH_LIST", list: name_list.map(entry => toGeoPoint([entry.lat, entry.lon], entry.display_name))});
 }
 
 
+function* searchListSaga() {
+    yield takeEvery("SEARCH_LIST_SAGA", fetchSearchList)
+}
 
-function* checkSaga() {
-   yield takeEvery("CHECK", fetchCheck);
+
+function* getSaga() {
+   yield takeEvery("GET_DATA", fetchGet);
 }
 
 // Starts fetchUser on each dispatched USER_FETCH_REQUESTED action
@@ -128,27 +163,36 @@ function* selectSaga() {
 function* rootSaga() {
    yield all([
      initSaga(),
-     checkSaga(),
-     selectSaga()
+     getSaga(),
+     selectSaga(),
+     searchListSaga()
    ])
  }
  
 
 
 const reducer = combineReducers({
-    mapPointer: setMap,
+    mapData: setMap,
     List: getList,
-    SelectedReq: select,
-    components: componentsReducer
+    SelectedReq: get,
+    components: componentsReducer,
+    
  })
+
+ function rootReducer(state, action) {
+    const intermediateState = reducer(state, action)
+    const finalState = selectElement(intermediateState, action)
+    return finalState
+  }
+  
 
 
 const sagaMiddleware = createSagaMiddleware()
 // mount it on the Store
 export const store = createStore(
-  reducer,
-  initialState,
-  applyMiddleware(sagaMiddleware)
+    rootReducer,
+    initialState,
+    applyMiddleware(sagaMiddleware)
 )
 
 // then run the saga

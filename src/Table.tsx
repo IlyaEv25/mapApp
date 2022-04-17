@@ -21,6 +21,12 @@ const columns = [
       key: 'to',
     },
     {
+        title: 'Downloaded',
+        render: (text, record) => {
+            return record.data? <a> Yes</a> : <a> No </a>;
+        }
+    },
+    {
       title: 'Action',
       key: 'action',
       render: (text, record) => (
@@ -62,7 +68,7 @@ const TableContainer = ({data, selected, dispatch}) => {
     return  (
         <Table rowSelection = {{selectedRowKeys: [selected]}} columns={columns} dataSource={data} onRow={(record) => ({
           onClick: () => {
-            dispatch({type: SELECT_SAGA, key: record.key, from: record.from, to: record.to})
+            dispatch({type: SELECT_SAGA, key: record.key, from: record.from, to: record.to, route: record.data})
             console.log(record);
           }
         })
