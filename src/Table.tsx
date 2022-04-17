@@ -1,5 +1,6 @@
 import { Table, Tag, Space } from 'antd';
 import { connect } from 'react-redux';
+import { SELECT_SAGA } from './actions';
 import { State } from './state'
 
 const columns = [
@@ -56,10 +57,16 @@ const columns = [
 //   ];
   
 
-const TableContainer = ({data}) => {
-    return(
-        <Table columns={columns} dataSource={data} />
-    )
+const TableContainer = ({data, selected, dispatch}) => {
+    console.log("TABLEDATA",data);
+    return  (
+        <Table rowSelection = {{selectedRowKeys: [selected]}} columns={columns} dataSource={data} onRow={(record) => ({
+          onClick: () => {
+            dispatch({type: SELECT_SAGA, key: record.key, from: record.from, to: record.to})
+            console.log(record);
+          }
+        })
+} />)
 }
 
-export default connect((state: State) => ({data: state.List}))(TableContainer);
+export default connect((state: State) => ({data: state.List, selected: state.components.selected}))(TableContainer);

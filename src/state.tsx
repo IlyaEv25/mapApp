@@ -1,7 +1,8 @@
 export type ReqEntry = {
     id: number,
     from: string,
-    to: string
+    to: string,
+    data: ReqData | null
 }
 
 export type GeoPoint = {
@@ -27,12 +28,14 @@ export type ComponentsData = {
 
 
 export type State = {
+    mapPointer: any,
     List: Array<ReqEntry>,
     SelectedReq: ReqData,
     components: ComponentsData
 }
 
 const initialState: State = {
+    mapPointer: null,
     List : [],
     SelectedReq: {
         from: null,
