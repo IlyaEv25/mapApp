@@ -20,6 +20,9 @@ export type ReqData = {
 
 export type ComponentsData = {
     border: number,
+    startBorder: number,
+    mouseDown: boolean,
+    xStart:number,
     filteredList: Array<ReqEntry>,
     selected: number,
     edited: number,
@@ -49,6 +52,9 @@ const initialState: State = {
     },
     components: {
         border: 700,
+        startBorder:700,
+        mouseDown: false,
+        xStart: -1,
         filteredList: [],
         selected: -1,
         edited: -1,

@@ -21,6 +21,8 @@
   border: 1px solid #d9d9d9;
   border-radius: 2px;
 
+  height: 180px;
+
 
 }
 
@@ -62,6 +64,7 @@
 }
 
 .sider {
+  margin-right: 10%;
   min-height: 1060px;
   /* display:flex; */
 }

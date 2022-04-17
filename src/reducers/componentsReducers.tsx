@@ -23,9 +23,52 @@ const fromList = (state = initialState.components.fromSelectedList, action) => {
     }
 }
 
+const mousePressed = (state = initialState.components.mouseDown, action) => {
+    switch (action.type)
+    {
+        case "MOUSE_DOWN":
+            return action.mouse_down;
+        default:
+            return state;
+    }
+}
+
+const setX = (state = initialState.components.xStart, action) => {
+    switch (action.type)
+    {
+        case "X_START":
+            return action.x;
+        default:
+            return state;
+    }
+}
+
+const setBorder = (state = initialState.components.border, action) => {
+    switch (action.type)
+    {
+        case "SET_BORDER":
+            return action.border;
+        default:
+            return state;
+    }
+}
+
+const setStartBorder = (state = initialState.components.startBorder, action) => {
+    switch (action.type)
+    {
+        case "SET_START_BORDER":
+            return action.start_border;
+        default:
+            return state;
+    }
+}
+
 
 const componentsReducer = combineReducers({
-    border: (state = initialState.components.border, action) => state,
+    border: setBorder,
+    startBorder: setStartBorder,
+    xStart: setX,
+    mouseDown: mousePressed,
     selected: selectTable,
     filteredList: (state = initialState.components.filteredList, action) => state,
     edited: (state = initialState.components.edited, action) => state,
