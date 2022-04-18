@@ -118,7 +118,7 @@ const EditableCell = connect((state: State) => ({
 const TableContainer = ({data, selected, dispatch}: TableProps) => {
     console.log("TABLEDATA",data);
     return  (
-        <Table className='table' rowSelection = {{selectedRowKeys: [selected]}} columns={columns} dataSource={data} onRow={(record) => ({
+        <Table scroll = {{ x: 400 }} className='table' rowSelection = {{selectedRowKeys: [selected]}} columns={columns} dataSource={data} onRow={(record) => ({
           onClick: () => {
             dispatch({type: SELECT_SAGA, key: record.key, from: record.from, to: record.to, route: record.data})
             console.log(record);
