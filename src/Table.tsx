@@ -7,11 +7,13 @@ import { State } from './state'
 import { AutoComplete } from 'antd';
 
 import { store } from './store';
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 const { Option } = AutoComplete;
 
 const EditableCellP = ({edited, editedType, text, options, where, record, dispatch}) => {
   const inputRef = useRef(null);
+  var [timer, setT] = useState(setTimeout(()=>{}, 0));
+
   useEffect(() => {
     if (edited == record.key && editedType == where) {
       inputRef.current.focus();
@@ -22,14 +24,22 @@ const EditableCellP = ({edited, editedType, text, options, where, record, dispat
     (edited == record.key && editedType == where)? 
     <AutoComplete ref ={inputRef} style={{ width: 200 }} defaultValue={text}
      onChange={(e) => {
-      dispatch({type: "SEARCH_LIST_SAGA", str: e});
-      if (e != "")
-        dispatch({type: "EDIT_SAGA",
-                  key: record.key,
-                  [where]: e, 
-                  [where == "from"? "to" : "from"]: record[where == "from"? "to" : "from"] });
+        clearTimeout(timer);
+        var t = setTimeout(()=>{
+          dispatch({type: "SEARCH_LIST_SAGA", str: e});
+          if (e != "")
+            dispatch({
+              type: "EDIT_SAGA",
+              key: record.key,
+              [where]: e, 
+              [where == "from"? "to" : "from"]: record[where == "from"? "to" : "from"]
+            });
+        }, 1000);
+        setT(t);
       }}
-      onBlur = {() => dispatch({type: "SET_EDITED", edited: -1, edit_type: "from"})}
+      onBlur = {() => {
+        dispatch({type: "SET_EDITED", edited: -1, edit_type: "from"})
+      }}
        placeholder="To">
           {options.map((option, index) => (
               <Option key={index} value={option.name}>
@@ -84,32 +94,7 @@ const columns = [
         </Space>
       ),
     },
-  ];
-  
-//   const data = [
-//     {
-//       key: '1',
-//       name: 'John Brown',
-//       age: 32,
-//       address: 'New York No. 1 Lake Park',
-//       tags: ['nice', 'developer'],
-//     },
-//     {
-//       key: '2',
-//       name: 'Jim Green',
-//       age: 42,
-//       address: 'London No. 1 Lake Park',
-//       tags: ['loser'],
-//     },
-//     {
-//       key: '3',
-//       name: 'Joe Black',
-//       age: 32,
-//       address: 'Sidney No. 1 Lake Park',
-//       tags: ['cool', 'teacher'],
-//     },
-//   ];
-  
+  ]; 
 
 const TableContainer = ({data, selected, dispatch}) => {
     console.log("TABLEDATA",data);

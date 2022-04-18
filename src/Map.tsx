@@ -1,7 +1,8 @@
 import React, { useEffect } from 'react';
 import { connect } from 'react-redux';
-import L from '../../node_modules/leaflet/dist/leaflet' 
-import { SET_MAP } from '../actions'
+import L from 'leaflet/dist/leaflet' 
+import { SET_MAP } from './actions'
+import { State } from './state';
 
 const Map = ({data, mapData, dispatch}) => {
     useEffect(() => {
@@ -51,4 +52,4 @@ const Map = ({data, mapData, dispatch}) => {
     return <div className='Map' id="map"></div>
   }
 
-  export default connect((state) => ({data: state.SelectedReq, mapData: state.mapData}))(Map);
+  export default connect((state: State) => ({data: state.SelectedReq, mapData: state.mapData}))(Map);

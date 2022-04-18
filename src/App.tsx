@@ -6,7 +6,7 @@ import { State } from './state'
 
 const { Header, Footer, Sider, Content } = Layout;
 
-import Map from './components/map';
+import Map from './Map';
 import TableContainer from "./Table"
 import { useState } from 'react';
 
