@@ -1,13 +1,22 @@
 import React, { useEffect } from 'react';
 import { connect } from 'react-redux';
-import L from 'leaflet/dist/leaflet' 
+import L from 'leaflet' 
 import { SET_MAP } from './actions'
-import { State } from './state';
+import { ReqData, State } from './state';
+import { Dispatch } from 'redux';
 
-const Map = ({data, mapData, dispatch}) => {
+type MapProps = {
+    data: ReqData,
+    mapData: L.Map | null,
+    dispatch: Dispatch
+}
+
+type idedLayer = L.Layer & {id? : number};
+
+const Map = ({data, mapData, dispatch}: MapProps) => {
     useEffect(() => {
 
-        if (!mapData.mapPointer)
+        if (!mapData)
         {
             var map = L.map('map');
             L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4NXVycTA2emYycXBndHRqcmZ3N3gifQ.rJcFIG214AriISLbB6B5aw', {
@@ -20,15 +29,15 @@ const Map = ({data, mapData, dispatch}) => {
             dispatch({type: SET_MAP, map})
         }
         else
-            var map = mapData.mapPointer;
+            var map = mapData;
 
         map.invalidateSize();
-        //setTimeout(function(){ map.invalidateSize()}, 400);
 
         console.log("PRED", data);
         if (data.from)
         {
-            map.eachLayer(layer => {
+            map.eachLayer(layer_p => {
+              const layer = layer_p as idedLayer;   
               if (layer.id == -1)
                 map.removeLayer(layer);
             })
@@ -36,9 +45,12 @@ const Map = ({data, mapData, dispatch}) => {
             if (data.route)
             {
               var polyline = L.polyline(data.route.map(x => [x.y, x.x]), {color: 'blue'}).addTo(map);
-              var polylineLayer = L.layerGroup([polyline]);
+              var t_polyline = polyline as idedLayer;
+              var polylineLayer = L.layerGroup([t_polyline]);
               
-              polylineLayer.id = -1;
+              //polylineLayer.id = -1;
+              t_polyline.id = -1;
+
               polylineLayer.addTo(map);
 
               map.fitBounds(polyline.getBounds());
@@ -52,4 +64,4 @@ const Map = ({data, mapData, dispatch}) => {
     return <div className='Map' id="map"></div>
   }
 
-  export default connect((state: State) => ({data: state.SelectedReq, mapData: state.mapData}))(Map);
+  export default connect((state: State) => ({data: state.SelectedReq, mapData: state.mapPointer}))(Map);

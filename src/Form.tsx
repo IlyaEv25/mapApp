@@ -1,18 +1,25 @@
 import { Form, Input, Button, Checkbox, AutoComplete  } from 'antd';
 import { useState } from 'react';
 import { connect } from 'react-redux';
+import { Dispatch } from 'redux';
+import { PUT_SAGA, SEARCH_LIST_SAGA } from './actions';
 const { Option } = AutoComplete;
-import { State } from './state'
+import { GeoPoint, ReqEntry, State } from './state'
 
-const FormW = ({dispatch, options}) =>{
+type FormProps = {
+    dispatch: Dispatch,
+    options: Array<GeoPoint>
+}
+
+const FormW = ({dispatch, options}: FormProps) =>{
     var [timer, setT] = useState(setTimeout(()=>{}, 0));
-    var onChange = (e) => {
+    var onChange = (e: string) => {
         clearTimeout(timer);
             var t = setTimeout(()=>{
-            dispatch({type: "SEARCH_LIST_SAGA", str: e});
+            dispatch({type: SEARCH_LIST_SAGA, str: e});
             // if (e != "")
             //     dispatch({
-            //     type: "EDIT_SAGA",
+            //     type: EDIT_SAGA,
             //     key: record.key,
             //     [where]: e, 
             //     [where == "from"? "to" : "from"]: record[where == "from"? "to" : "from"]
@@ -26,15 +33,13 @@ const FormW = ({dispatch, options}) =>{
         id = "form"
         name="basic"
         wrapperCol={{ span: 16 }}
-        //initialValues={{ remember: true }}
-        onFinish={(e) => dispatch({type: "GET_DATA", data: e})}
-        //onFinishFailed={onFinishFailed}
+        onFinish={(e: ReqEntry) => dispatch({type: PUT_SAGA, data: e})}
         autoComplete="on"
         >
         <Form.Item
             wrapperCol={{span: 10}}
             name="from"
-            rules={[{ required: true, message: 'Please input your username!' }]}>
+            rules={[{ required: true, message: 'Please input your starting point!' }]}>
             {/* <Input /> */}
             <AutoComplete style={{ width: 200 }} onChange={onChange} placeholder="From" >
                 {options.map((option, index) => (
@@ -47,7 +52,7 @@ const FormW = ({dispatch, options}) =>{
 
         <Form.Item
             name="to"
-            rules={[{ required: true, message: 'Please input your password!' }]}>
+            rules={[{ required: true, message: 'Please input your destination!' }]}>
             <AutoComplete style={{ width: 200 }} onChange={onChange} placeholder="To">
                 {options.map((option, index) => (
                     <Option key={index} value={option.name}>

@@ -1,26 +1,37 @@
 import { Layout } from 'antd';
 import Form from './Form';
 import { connect } from 'react-redux';
-import { ResizableBox } from 'react-resizable';
 import { State } from './state'
+import L from 'leaflet'
 
 const { Header, Footer, Sider, Content } = Layout;
 
 import Map from './Map';
 import TableContainer from "./Table"
 import { useState } from 'react';
+import { Dispatch } from 'redux';
+import { MOUSE_DOWN, SET_BORDER, SET_START_BORDER, X_START } from './actions';
 
+type AppProps = {
+    border: number,
+    xStart: number,
+    mouseDown: boolean,
+    startBorder: number,
+    map: L.Map | null,
+    dispatch: Dispatch
+}
 
-const App = ({border, xStart, mouseDown, startBorder, map, dispatch}) => {
+const App = ({border, xStart, mouseDown, startBorder, map, dispatch} : AppProps) => {
     var [counter, setCounter] = useState(0);
     return (
         <Layout
             onMouseUp={(e) => {
                     if (mouseDown){
-                        dispatch({type: "MOUSE_DOWN", mouse_down: false});
-                        dispatch({type: "SET_START_BORDER", start_border: border})
-                        dispatch({type: "X_START", x: -1});
-                        map.invalidateSize();
+                        dispatch({type: MOUSE_DOWN, mouse_down: false});
+                        dispatch({type: SET_START_BORDER, start_border: border})
+                        dispatch({type: X_START, x: -1});
+                        if (map)
+                            map.invalidateSize();
                     }
             }} 
             onMouseMove = {(e) => {
@@ -28,7 +39,7 @@ const App = ({border, xStart, mouseDown, startBorder, map, dispatch}) => {
                 if (mouseDown && counter % 6 == 0)
                 {
                     console.log(e);
-                    dispatch({type: "SET_BORDER", border: startBorder + (e.pageX - xStart)})
+                    dispatch({type: SET_BORDER, border: startBorder + (e.pageX - xStart)})
                 }
         }}>
             <Header >
@@ -41,8 +52,8 @@ const App = ({border, xStart, mouseDown, startBorder, map, dispatch}) => {
                         <div className='additional'
                             onMouseDown={(e) => {
                                 console.log(e)
-                                dispatch({type: "MOUSE_DOWN", mouse_down: true});
-                                dispatch({type: "X_START", x: e.pageX});
+                                dispatch({type: MOUSE_DOWN, mouse_down: true});
+                                dispatch({type: X_START, x: e.pageX});
                             }}></div>
                     </div>
                 </Sider>
@@ -51,7 +62,6 @@ const App = ({border, xStart, mouseDown, startBorder, map, dispatch}) => {
                         <Map/>
                         <Form/>
                     </div>
-                    {/* <button onClick={() => dispatch({type: "INIT"})}>Blabla</button> */}
                 </Content>
             </Layout>
             <Footer className ="footer"></Footer>
@@ -60,7 +70,7 @@ const App = ({border, xStart, mouseDown, startBorder, map, dispatch}) => {
         }
 
 export default connect((state:State) => ({
-    map: state.mapData.mapPointer,
+    map: state.mapPointer,
     border: state.components.border,
     startBorder: state.components.startBorder,
     xStart: state.components.xStart,

@@ -1,3 +1,5 @@
+import L from 'leaflet' 
+
 export type ReqEntry = {
     id: number,
     key:number,
@@ -23,28 +25,23 @@ export type ComponentsData = {
     startBorder: number,
     mouseDown: boolean,
     xStart:number,
-    filteredList: Array<ReqEntry>,
     selected: number,
     edited: number,
-    editedType: string,
-    fromSelectedList: Array<GeoPoint>,
-    toSelectedList: Array<GeoPoint>
+    editedType: "from"|"to",
+    fromSelectedList: Array<GeoPoint>
 }
 
 
 
 export type State = {
-    mapData: any,
+    mapPointer: L.Map | null,
     List: Array<ReqEntry>,
     SelectedReq: ReqData,
     components: ComponentsData
 }
 
 const initialState: State = {
-    mapData: {
-        mapPointer: null,
-        polyline: null
-    },
+    mapPointer: null,
     List : [],
     SelectedReq: {
         from: null,
@@ -56,12 +53,10 @@ const initialState: State = {
         startBorder:700,
         mouseDown: false,
         xStart: -1,
-        filteredList: [],
         selected: -1,
         edited: -1,
         editedType: "from",
-        fromSelectedList: [],
-        toSelectedList: []
+        fromSelectedList: []
     }
 }
 

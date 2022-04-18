@@ -1,6 +1,6 @@
 import { ReqEntry, ReqData} from "../state";
 import initialState from "../state";
-import { GET_LIST, SELECT, SET_MAP, SET_POLYLINE } from "../actions";
+import { ADD_TO_TABLE, DELETE_ELEMENT, EDIT_LIST, GET_LIST,  PUT_DATA_MAP,  SET_MAP } from "../actions";
 
 import { AnyAction } from 'redux';
 
@@ -11,7 +11,7 @@ export const getList = (state: Array<ReqEntry> = initialState.List, action: AnyA
     {
         case GET_LIST:
             return action.list;
-        case "ADD_TO_TABLE":
+        case ADD_TO_TABLE:
             console.log(action);
             var prev_id = state.length > 0 ? state[state.length - 1].id : -1;
             return [
@@ -28,7 +28,7 @@ export const getList = (state: Array<ReqEntry> = initialState.List, action: AnyA
                     }
                 }
                 ]
-        case "EDIT_LIST":
+        case EDIT_LIST:
             return state.map(entry => {
                 if (entry.key == action.key)
                     return {
@@ -45,7 +45,7 @@ export const getList = (state: Array<ReqEntry> = initialState.List, action: AnyA
                 else
                     return entry;
             })
-        case "DELETE_ELEMENT":
+        case DELETE_ELEMENT:
             return state.filter(entry => entry.id != action.id);
         default:
             return state;
@@ -53,28 +53,11 @@ export const getList = (state: Array<ReqEntry> = initialState.List, action: AnyA
 
 }
 
-//better types for reducers
-
-// export const select = (state: ReqData = initialState.SelectedReq, action: AnyAction): ReqData => {
-
-//     switch(action.type)
-//     {
-//         case SELECT:
-//             console.log(action);
-//             return action.data;
-//         default:
-//             return state;
-//     }
-// }
-
-export const setMap = (state = initialState.mapData, action) => {
+export const setMap = (state = initialState.mapPointer, action: AnyAction) => {
     switch (action.type)
     {
         case SET_MAP:
-            return {
-                ...state,
-                mapPointer:action.map
-            };
+            return action.map;
 
         default:
             return state;
@@ -85,7 +68,7 @@ export const get = (state: ReqData = initialState.SelectedReq, action: AnyAction
 
     switch(action.type)
     {
-        case "GET":
+        case PUT_DATA_MAP:
             //console.log(action);
             return action.data;
         default:

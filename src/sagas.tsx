@@ -1,32 +1,26 @@
 import {all, takeEvery, takeLatest} from 'redux-saga/effects'
-import {fetchSearchList, fetchGet, fetchEdit, fetchData, fetchSelect} from './apiFetchs'
+import { EDIT_SAGA, PUT_SAGA, SEARCH_LIST_SAGA, SELECT_SAGA } from './actions';
+import {fetchSearchList, fetchGet, fetchEdit, fetchSelect} from './apiFetchs'
  
  function* searchListSaga() {
-     yield takeLatest("SEARCH_LIST_SAGA", fetchSearchList)
+     yield takeLatest(SEARCH_LIST_SAGA, fetchSearchList)
  }
  
  
  function* getSaga() {
-    yield takeEvery("GET_DATA", fetchGet);
+    yield takeEvery(PUT_SAGA, fetchGet);
  }
  
  function* editSaga() {
-    yield takeLatest("EDIT_SAGA", fetchEdit);
- }
- 
- // Starts fetchUser on each dispatched USER_FETCH_REQUESTED action
- // Allows concurrent fetches of user
- function* initSaga() {
-   yield takeEvery("INIT", fetchData);
+    yield takeLatest(EDIT_SAGA, fetchEdit);
  }
  
  function* selectSaga() {
-    yield takeEvery("SELECT_SAGA", fetchSelect);
+    yield takeEvery(SELECT_SAGA, fetchSelect);
  }
  
  export default function* rootSaga() {
     yield all([
-      initSaga(),
       getSaga(),
       selectSaga(),
       searchListSaga(),
