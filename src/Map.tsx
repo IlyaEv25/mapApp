@@ -5,6 +5,8 @@ import { SET_MAP } from './actions'
 import { ReqData, State } from './state';
 import { Dispatch } from 'redux';
 
+L.Icon.Default.imagePath='images/';
+
 type MapProps = {
     data: ReqData,
     mapData: L.Map | null,
@@ -34,7 +36,7 @@ const Map = ({data, mapData, dispatch}: MapProps) => {
         map.invalidateSize();
 
         console.log("PRED", data);
-        if (data.from)
+        if (data.from && data.to)
         {
             map.eachLayer(layer_p => {
               const layer = layer_p as idedLayer;   
@@ -45,11 +47,19 @@ const Map = ({data, mapData, dispatch}: MapProps) => {
             if (data.route)
             {
               var polyline = L.polyline(data.route.map(x => [x.y, x.x]), {color: 'blue'}).addTo(map);
+              var marker_from = L.marker([data.from.y, data.from.x]).addTo(map);
+              var marker_to = L.marker([data.to.y, data.to.x]).addTo(map);
+
               var t_polyline = polyline as idedLayer;
-              var polylineLayer = L.layerGroup([t_polyline]);
+              var t_m_from = marker_from as idedLayer;
+              var t_m_to = marker_to as idedLayer;
+
+              var polylineLayer = L.layerGroup([t_polyline, t_m_from, t_m_to]);
               
               //polylineLayer.id = -1;
               t_polyline.id = -1;
+              t_m_from.id = -1;
+              t_m_to.id = -1;
 
               polylineLayer.addTo(map);
 
