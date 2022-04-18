@@ -1,9 +1,27 @@
 import { Form, Input, Button, Checkbox, AutoComplete  } from 'antd';
+import { useState } from 'react';
 import { connect } from 'react-redux';
 const { Option } = AutoComplete;
 import { State } from './state'
 
-const FormW = ({dispatch, options}) =>(
+const FormW = ({dispatch, options}) =>{
+    var [timer, setT] = useState(setTimeout(()=>{}, 0));
+    var onChange = (e) => {
+        clearTimeout(timer);
+            var t = setTimeout(()=>{
+            dispatch({type: "SEARCH_LIST_SAGA", str: e});
+            // if (e != "")
+            //     dispatch({
+            //     type: "EDIT_SAGA",
+            //     key: record.key,
+            //     [where]: e, 
+            //     [where == "from"? "to" : "from"]: record[where == "from"? "to" : "from"]
+            //     });
+            }, 1000);
+            setT(t);
+    }
+
+    return (
     <Form
         id = "form"
         name="basic"
@@ -18,7 +36,7 @@ const FormW = ({dispatch, options}) =>(
             name="from"
             rules={[{ required: true, message: 'Please input your username!' }]}>
             {/* <Input /> */}
-            <AutoComplete style={{ width: 200 }} onChange={(e) => (dispatch({type: "SEARCH_LIST_SAGA", str: e}))} placeholder="From" >
+            <AutoComplete style={{ width: 200 }} onChange={onChange} placeholder="From" >
                 {options.map((option, index) => (
                     <Option key={index} value={option.name}>
                     {option.name}
@@ -30,7 +48,7 @@ const FormW = ({dispatch, options}) =>(
         <Form.Item
             name="to"
             rules={[{ required: true, message: 'Please input your password!' }]}>
-            <AutoComplete style={{ width: 200 }} onChange={(e) => (dispatch({type: "SEARCH_LIST_SAGA", str: e}))} placeholder="To">
+            <AutoComplete style={{ width: 200 }} onChange={onChange} placeholder="To">
                 {options.map((option, index) => (
                     <Option key={index} value={option.name}>
                     {option.name}
@@ -46,5 +64,6 @@ const FormW = ({dispatch, options}) =>(
         </Form.Item>
     </Form>
     )
+}
 
 export default connect((state: State) => ({options : state.components.fromSelectedList}))(FormW);
